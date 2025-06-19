@@ -37,13 +37,13 @@ temps = {
     'jour' : 86400,
     'semaine' : 604800,
     'mois' : 2.628e6,
-    'année' : 3.154e7,
-    'décennie' : 3.154e8,
-    'siècle' : 3.154e9
+    'année' : 3.1536e7,
+    'décennie' : 3.1536e8,
+    'siècle' : 3.1536e9
     }
 
 
-
+### Conversion de la distance en mètre et calcul du temps en secondes ###
 if input_unit in unite_dict:
     distance_metre = distance * unite_dict[f'{input_unit}']
     temps_lumiere_seconde = distance_metre / c 
@@ -51,20 +51,17 @@ else:
     raise SystemExit("Unité non reconnue.")
 
 
-def reste():
-    if distance_metre % c != 0:
-        return (distance_metre % c / c)
-    return 0
-
 if temps_lumiere_seconde < temps['minute']:
-    temps_entier = (temps_lumiere_seconde / temps['seconde'])
-    reste_temps = reste() * temps['seconde']
+    temps_entier = int((temps_lumiere_seconde / temps['seconde']))
+    reste_temps = int((temps_lumiere_seconde - temps_entier * temps['seconde']))
+    reste_temps_converti = reste_temps
     unite = "seconde"
     unite_reste = ""
 
 elif temps_lumiere_seconde < temps['heure']:
     temps_entier = int((temps_lumiere_seconde / temps['minute']))
     reste_temps = temps_lumiere_seconde - temps_entier * temps['minute']
+    reste_temps_converti = int(reste_temps / temps['seconde'])
     unite = "minute"
     unite_reste = "seconde"
     
@@ -102,10 +99,10 @@ reste_temps = int(reste_temps)
 if temps_entier > 1 and not unite == "mois":
     unite += "s"
 
-if reste_temps > 1 and not unite_reste == "mois":
+if reste_temps_converti > 1 and not unite_reste == "mois":
     unite_reste += "s"    
     
-if reste_temps != 0:
+if reste_temps_converti != 0:
     print(f'Pour une distance de {int(distance)}{input_unit}, la lumière met environ {temps_entier} {unite} et {reste_temps_converti} {unite_reste} à arriver.')
 else:
     print(f'Pour une distance de {int(distance)}{input_unit}, la lumière met environ {temps_entier} {unite} à arriver.')
